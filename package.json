@@ -1,0 +1,9 @@
+{
+    "name": "instagram-monorepo",
+    "version": "1.0.0",
+    "workspaces": [
+        "backend/**",
+        "frontend/**"
+    ],
+    "private": true
+}
