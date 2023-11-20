@@ -13,6 +13,12 @@ export class User {
 
   @Prop({ required: true })
   password: string;
+
+  @Prop()
+  picture: string;
+  
+  @Prop()
+  isOauth: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

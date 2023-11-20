@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as session from 'express-session';
 import { createClient } from 'redis';
 import RedisStore from 'connect-redis';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const REDIS_CONNECTION =
   process.env.REDIS_CONNECTION ?? 'redis://localhost:6379';
@@ -18,6 +19,8 @@ const redisStore = new RedisStore({
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   app.use(
     session({
       secret: process.env.SESSION_SECRET ?? 'keyboard cat',
@@ -32,6 +35,18 @@ async function bootstrap() {
       store: redisStore,
     }),
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('Swagger example')
+    .setDescription('The instagram API description')
+    .setVersion('1.0')
+    .addTag('instagram')
+    .addCookieAuth('__session')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();
